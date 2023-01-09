@@ -50,12 +50,12 @@ class LeNet(Sequential):
     #생성자
     def __init__(self, input_shape, nb_classes): 
         super().__init__()
-#Conv2D(필터 개수,커널의 행과 열,필터를 적용하는 간격,
-# ,렐루 활성화 함수 사용,입력이미지형태,패딩값same=입출력이미지크기같음)
+    #Conv2D(필터 개수,커널의 행과 열,필터를 적용하는 간격,
+    # ,렐루 활성화 함수 사용,입력이미지형태,패딩값same=입출력이미지크기같음)
         self.add(Conv2D(6, kernel_size=(5,5), strides=(1,1), activation='relu',
                         input_shape=input_shape, padding="same")) 
-# AveragePooling2D(연산 범위,계산 과정에서 한 스텝마다 이동하는 크기
-# ,'valid' 값은 이미지크기유지비활성화)                        
+    # AveragePooling2D(연산 범위,계산 과정에서 한 스텝마다 이동하는 크기
+    # ,'valid' 값은 이미지크기유지비활성화)                        
         self.add(AveragePooling2D(pool_size=(2,2), strides=(2,2), padding='valid')) 
  
         self.add(Conv2D(16, kernel_size=(5,5), strides=(1,1), activation='relu',
@@ -69,11 +69,11 @@ class LeNet(Sequential):
          # 출력층의 노드 개수는 2이고 소프트맥스 활성화 함수가 적용된 출력층   
         self.add(Dense(nb_classes, activation='softmax'))
         #학습 방식 설정
-#optimizer : 
-#손실함수를 사용해 구한 값으로 기울기를 구하고 신경망의 파라미터를 학습에 어떻게 반영할지 결정하는 방법
-#loss : 최적화 과정에서 사용될 손실함수 설정.
-# 다수의 클래스 사용하므로loss='sparse_categorical_crossentropy'
-#metrics:모델의 평가기준 지정
+    #optimizer : 
+    #손실함수를 사용해 구한 값으로 기울기를 구하고 신경망의 파라미터를 학습에 어떻게 반영할지 결정하는 방법
+    #loss : 최적화 과정에서 사용될 손실함수 설정.
+    # 다수의 클래스 사용하므로loss='sparse_categorical_crossentropy'
+    #metrics:모델의 평가기준 지정
         self.compile(optimizer='adam',
                      loss=categorical_crossentropy,
                      metrics=['accuracy'])

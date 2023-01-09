@@ -45,17 +45,15 @@ LeNet-5 신경망을 사용해 로컬데이터의 필기체를 96%확률로 인�
 ### :bulb: 모델 계층을 순차적으로 쌓아 올려 LeNet클래스 만들기
 
 
-num_classes = 10
-class LeNet(Sequential):
-    #생성자
+    num_classes = 10
+    class LeNet(Sequential):
     def __init__(self, input_shape, nb_classes): 
         super().__init__()
-    #Conv2D(필터 개수,커널의 행과 열,필터를 적용하는 간격,
-    # ,렐루 활성화 함수 사용,입력이미지형태,패딩값same=입출력이미지크기같음)
-        self.add(Conv2D(6, kernel_size=(5,5), strides=(1,1), activation='relu',
-                        input_shape=input_shape, padding="same")) 
-    # AveragePooling2D(연산 범위,계산 과정에서 한 스텝마다 이동하는 크기
-    # ,'valid' 값은 이미지크기유지비활성화)                        
+        #Conv2D(필터 개수,커널의 행과 열,필터를 적용하는 간격,
+        # ,렐루 활성화 함수 사용,입력이미지형태,패딩값same=입출력이미지크기같음)
+        self.add(Conv2D(6, kernel_size=(5,5), strides=(1,1), activation='relu',input_shape=input_shape, padding="same")) 
+        # AveragePooling2D(연산 범위,계산 과정에서 한 스텝마다 이동하는 크기
+        # ,'valid' 값은 이미지크기유지비활성화)                        
         self.add(AveragePooling2D(pool_size=(2,2), strides=(2,2), padding='valid')) 
  
         self.add(Conv2D(16, kernel_size=(5,5), strides=(1,1), activation='relu',

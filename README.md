@@ -77,4 +77,69 @@ LeNet-5 신경망을 사용해 로컬데이터의 필기체를 96%확률로 인�
                      metrics=['accuracy'])
 
 
+- 위의 표처럼 신경망 구성함
+
+### :bulb: 모델 생성 , 전처리
+- ImageDataGenerator - 객체 생성==> 내 데이터셋의 양이 적으므로 전처리 과정을 통해 이미지를 증식함.
+- flow_from_directory-객체 생성 ==> 폴더 구조를 그대로 가져와서 imageDataGenerator에 실제 데이터를 채워줌.(자신의 로컬 폴더에있는 데이터를 사용하기 위해 생성함.)
+
+        # 클래스(LeNet)를 호출하여 LeNet-5라는 모델을 생성
+        model = LeNet((100,100,3), num_classes) 
+        model.summary()
+        
+### :bulb: 모델 학습
+        #모델 학습
+        history=model.fit(train_generator,#입력 데이터
+                  epochs=EPOCHS,#학습 횟수
+                  #한 에포크에서 사용한 스텝
+                  steps_per_epoch=train_num // BATCH_SIZE,
+                  #성능을 모니터링하는 데 사용하는 데이터셋을 설정
+                  validation_data=valid_generator,
+                  #한 에포크가 종료될 때 사용되는 검증 스텝 개수
+                  validation_steps=valid_num // BATCH_SIZE,
+                  #텐서보드라는 콜백 함수를 생성후 파라미터 넣기@
+                  callbacks=[tensorboard_callback],
+                  #훈련의 진행 과정을 보여 주기설정
+                  verbose=1) 
+
+### :bulb: 결과 예측
+- 검증데이터 100개를 랜덤으로 가져와 예측이 틀리면 빨간색, 맞으면 노란색 글씨로 출력
+-epoch=50일때
+
+![image](https://user-images.githubusercontent.com/105347300/211257076-478e1c50-df75-45dd-a5da-80622c6ee2da.png)
+
+- 시행착오 결과 epoch를 충분히 적절히 설정해야함
+- 최적의 epochs =100으로 설정함.
+
+            #predict_classes() 메서드를 사용하여 결과를 예측
+            class_names = ['0','1','2','3','4','5','6','7','8','9']
+            validation, label_batch = next(iter(valid_generator)) #validation: 이미지 배열, label_batch : 정답 레이블 배열
+
+            prediction_values = model.predict(validation) #예측값
+            prediction_values = np.argmax(prediction_values, axis=1) #이미지 배열의 예측값
+
+            fig = plt.figure(figsize=(12,8))
+            fig.subplots_adjust(left=0, right=1, bottom=0, top=1, hspace=0.05, wspace=0.05)
+
+            for i in range(100):
+                ax = fig.add_subplot(10, 10, i+1, xticks=[], yticks=[])
+                ax.imshow(validation[i,:], cmap=plt.cm.gray_r, interpolation='nearest')
+                print('prediction_values[i]=',prediction_values[i])
+                print('np.argmax(label_batch[i])=',np.argmax(label_batch[i]))
+                if prediction_values[i] == np.argmax(label_batch[i]): #이미지배열 예측값==정답 레이블배열의 최대값인덱스
+                    ax.text(3, 17, class_names[prediction_values[i]], color='yellow', fontsize=14)
+                else:
+                    ax.text(3, 17, class_names[prediction_values[i]], color='red', fontsize=14)
+            plt.show()
+            
+### :bulb: 예측 결과 , 모델 성능
+- 모델 파일 이름 : yn_lenet_model.h5 
+![afe213166d1a6bbb2d44465a52d8d97c94960912_re_1673242484453](https://user-images.githubusercontent.com/105347300/211256338-6ab2f5c0-8555-4452-8c57-f9073af9b3b7.png)
+- epochs =  100 으로 설정
+- 100개의 검증이미지 중  96 개 맞춤 
+- 필기체 인식률 : 96%
+- 훈련데이터 정확도: 0.9932
+- 훈련데이터 오차:0.0191
+- 검증데이터 정확도:0.96
+- 검증데이터 오차:0.2418
 

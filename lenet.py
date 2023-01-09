@@ -51,7 +51,7 @@ class LeNet(Sequential):
                      metrics=['accuracy'])
  
 # 클래스(LeNet)를 호출하여 LeNet-5라는 모델을 생성
-#출력은 개와 고양이 표현하는 2
+
 model = LeNet((100,100,3), num_classes) 
 model.summary()
  
